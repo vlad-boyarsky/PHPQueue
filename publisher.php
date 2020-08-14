@@ -5,7 +5,7 @@ $connection = new AMQPConnection([
     'vhost' => '/',
     'port' => 5672,
     'login' => 'root',
-    'password' => '123'
+    'password' => ''
 ]);
 
 $connection->connect();
