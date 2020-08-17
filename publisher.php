@@ -1,20 +1,16 @@
 <?php
 
-$connection = new AMQPConnection([
-    'host' => '127.0.0.1',
-    'vhost' => '/',
-    'port' => 5672,
-    'login' => 'root',
-    'password' => ''
-]);
+require_once __DIR__ . '/vendor/autoload.php';
 
-$connection->connect();
+use PhpAmqpLib\Connection\AMQPStreamConnection;
+use PhpAmqpLib\Message\AMQPMessage;
 
-$channel = new AMQPChannel($connection);
+$connection = new AMQPStreamConnection('localhost', 5672, 'guest', 'guest');
+$channel = $connection->channel();
 
-$exchange = new AMQPException($channel);
-$exchange->setName('message exchange');
-$exchange->setType(AMQP_EX_TYPE_DIRECT);
+$channel->queue_declare('hello', false, false, false, false);
 
-$exchange->setFlags(AMQP_DURABLE);
-$exchange->declarateExchange();
+$msg = new AMQPMessage('Hello World!');
+$channel->basic_publish($msg, '', 'hello');
+
+echo " [x] Sent 'Hello World!'\n";
