@@ -13,4 +13,8 @@ $channel->queue_declare('hello', false, false, false, false);
 $msg = new AMQPMessage('Hello World!');
 $channel->basic_publish($msg, '', 'hello');
 
+$queue = new AMQPQueue($channel);
+$queue->setName('tape_queue');
+$queue->declareQueue();
+
 echo " [x] Sent 'Hello World!'\n";
